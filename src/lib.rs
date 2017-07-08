@@ -6,6 +6,11 @@
     Released under the MIT License.
 */
 
+extern crate serde;
+#[macro_use]
+extern crate serde_derive;
+
+#[derive(Deserialize)]
 pub struct LocaleMessage {
     locstr: String,
     message: String,
