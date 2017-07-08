@@ -14,6 +14,7 @@ extern crate serde_derive;
 pub struct LocaleMessage {
     locstr: String,
     message: String,
+    phonetic: Option<String>,
 }
 
 impl LocaleMessage {
@@ -22,6 +23,9 @@ impl LocaleMessage {
     }
     fn get_message(&self) -> String {
         self.message.clone()
+    }
+    fn get_phonetic(&self) -> String {
+        self.phonetic.clone().unwrap()
     }
 }
 
@@ -38,7 +42,7 @@ impl Locale {
     pub fn add_message(&mut self, message: LocaleMessage) {
         self.messages.push(message);
     }
-    pub fn get_message_str(&self, locstr: &str) -> String {
+    fn get_message_str(&self, locstr: &str) -> String {
         let mut message_str = String::new();
         for message in &self.messages {
             if message.get_str() == locstr {
@@ -47,20 +51,15 @@ impl Locale {
         }
         message_str
     }
-}
-
-pub fn printloc(message: &str, locale: &Locale) {
-    let mut localized: Vec<String> = Vec::new();
-    let split = message.split(" ");
-    let locstrs: Vec<&str> = split.collect();
-    if !locale.get_message_str(locstrs[0]).is_empty() {
-        for l in locstrs {
-            localized.push(locale.get_message_str(l));
+    fn get_phonetic_str(&self, locstr: &str) -> String {
+        let mut phonetic_str = String::new();
+        for message in &self.messages {
+            if message.get_str() == locstr {
+                phonetic_str = message.get_phonetic();
+            }
         }
-    } else {
-        println!("{}", message);
+        phonetic_str
     }
-    println!("{}", localized.join(" "));
 }
 
 pub fn localize(message: &str, locale: &Locale) -> String {
@@ -75,6 +74,20 @@ pub fn localize(message: &str, locale: &Locale) -> String {
         return message.to_owned();
     }
     localized.join(" ")
+}
+
+pub fn phoneticize(message: &str, locale: &Locale) -> String {
+    let mut phoneticized: Vec<String> = Vec::new();
+    let split = message.split(" ");
+    let locstrs: Vec<&str> = split.collect();
+    if !locale.get_message_str(locstrs[0]).is_empty() {
+        for l in locstrs {
+            phoneticized.push(locale.get_phonetic_str(l));
+        }
+    } else {
+        return message.to_owned();
+    }
+    phoneticized.join(" ")
 }
 
 #[cfg(test)]
