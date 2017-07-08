@@ -1,2 +1,2 @@
-# litelocale
-Lightweight localization library for Rust.
+### litelocale
+> :es: Lightweight localization library for Rust.
