@@ -6,7 +6,6 @@
     Released under the MIT License.
 */
 
-#[derive(Deserialize)]
 pub struct LocaleMessage {
     locstr: String,
     message: String,
@@ -61,7 +60,7 @@ impl Locale {
 pub fn printloc(message: &str, locale: &Locale) {
     let mut localized: Vec<String> = Vec::new();
     let split = message.split(" ");
-    let locstrs = Vec<&str> = split.collect();
+    let locstrs: Vec<&str> = split.collect();
     if !locale.get_message_str(locstrs[0]).is_empty() {
         for l in locstrs {
             localized.push(locale.get_message_str(l));
