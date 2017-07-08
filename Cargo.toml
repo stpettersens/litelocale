@@ -1,0 +1,12 @@
+[package]
+name = "litelocale"
+version = "0.1.0"
+description = "Lightweight localization library for Rust."
+authors = ["Sam Saint-Pettersen <s.stpettersen+github@gmail.com>"]
+readme = "README.md"
+repository = "https://github.com/stpettersens/litelocale"
+homepage = "https://github.com/stpettersens/litelocale"
+documentation = "https://docs.rs/litelocale"
+license = "MIT"
+keywords = ["light", "locale", "localization", "library"]
+exclude = [".gitignore", ".travis.yml", "appveyor.yml"]
