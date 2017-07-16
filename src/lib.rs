@@ -1,10 +1,13 @@
 /*
     litelocale.
     Lightweight localization library for Rust.
+
     Copyright (c) 2017 Sam Saint-Pettersen.
 
     Released under the MIT License.
 */
+
+// ! Lightweight localization library for Rust.
 
 extern crate serde;
 #[macro_use]
@@ -14,10 +17,27 @@ extern crate serde_derive;
 pub struct LocaleMessage {
     locstr: String,
     message: String,
-    phonetic: Option<String>,
+    phonetic: String,
 }
 
 impl LocaleMessage {
+    ///
+    /// Create a new LocaleMessage, a unit of localization.
+    ///
+    /// * `locstr` - Identifying string (i.e. in English).
+    /// * `message` - Message string in localized language.
+    /// * `phonetic` - Message string in localized language as phonetic (optional).
+    ///
+    /// # Return value:
+    /// A LocaleMessage.
+    pub fn new(locstr: &str, message: &str, phonetic: &str)
+    -> LocaleMessage {
+        LocaleMessage {
+            locstr: locstr.to_owned(),
+            message: message.to_owned(),
+            phonetic: phonetic.to_owned(),
+        }
+    }
     fn get_str(&self) -> String {
         self.locstr.clone()
     }
@@ -25,7 +45,7 @@ impl LocaleMessage {
         self.message.clone()
     }
     fn get_phonetic(&self) -> String {
-        self.phonetic.clone().unwrap()
+        self.phonetic.clone()
     }
 }
 
@@ -34,11 +54,21 @@ pub struct Locale {
 }
 
 impl Locale {
+    ///
+    /// Create a new Locale, a collection of LocaleMessages.
+    ///
+    /// # Return value:
+    /// A Locale.
     pub fn new() -> Locale {
         Locale {
             messages: Vec::new(),
         }
     }
+    ///
+    /// Add a LocaleMessage to the Locale.
+    /// 
+    /// `message` - LocalMessage to add to this Locale.
+    ///
     pub fn add_message(&mut self, message: LocaleMessage) {
         self.messages.push(message);
     }
@@ -62,6 +92,15 @@ impl Locale {
     }
 }
 
+///
+/// Localize each word (e.g. hello -> hola) in the provided 
+/// message string using the provided Locale.
+///
+/// `message` - Message string to localize (i.e. in English).
+/// `locale` - &Locale to use for localization.
+///
+/// # Return value:
+/// A localized message string or original message as-is provided.
 pub fn localize(message: &str, locale: &Locale) -> String {
     let mut localized: Vec<String> = Vec::new();
     let split = message.split(" ");
@@ -76,6 +115,16 @@ pub fn localize(message: &str, locale: &Locale) -> String {
     localized.join(" ")
 }
 
+///
+/// Localize each word phonetically (e.g. hello -> ola) 
+/// in provided message string using the provided Locale
+/// where phonetic strings have been provided.
+///
+/// `message` - Message string to localize (i.e. in English).
+/// `locale` - &Locale to use for localization.
+///
+/// # Return value:
+/// A localized phonetic message string or original message as-is provided.
 pub fn phoneticize(message: &str, locale: &Locale) -> String {
     let mut phoneticized: Vec<String> = Vec::new();
     let split = message.split(" ");
@@ -91,8 +140,34 @@ pub fn phoneticize(message: &str, locale: &Locale) -> String {
 }
 
 #[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-    }
+fn load_spanish_locale() -> Locale {
+    let mut es = Locale::new();
+    es.add_message(LocaleMessage::new("hello", "hola", "ola"));
+    es.add_message(LocaleMessage::new("and", "y", "ee"));
+    es.add_message(LocaleMessage::new("goodbye", "adiós", "adeeos"));
+    es
+}
+#[test]
+fn localize_each_word() {
+    let es = load_spanish_locale();
+    assert_eq!("hola", localize("hello", &es));
+    assert_eq!("y", localize("and", &es));
+    assert_eq!("adiós", localize("goodbye", &es));
+}
+#[test]
+fn phoneticize_each_word() {
+    let es = load_spanish_locale();
+    assert_eq!("ola", phoneticize("hello", &es));
+    assert_eq!("ee", phoneticize("and", &es));
+    assert_eq!("adeeos", phoneticize("goodbye", &es));
+}
+#[test]
+fn localize_message() {
+    let es = load_spanish_locale();
+    assert_eq!("hola y adiós", localize("hello and goodbye", &es));
+}
+#[test]
+fn phoneticize_message() {
+    let es = load_spanish_locale();
+    assert_eq!("ola ee adeeos", phoneticize("hello and goodbye", &es));
 }
