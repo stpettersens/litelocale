@@ -2,7 +2,7 @@
 >:es: Lightweight localization library for Rust.
 
 [![Build Status](https://travis-ci.org/stpettersens/litelocale.png?branch=master)](https://travis-ci.org/stpettersens/litelocale)
-[![Build status](https://ci.appveyor.com/api/projects/status/e4prcyy8q1grrdgn?svg=true)](https://ci.appveyor.com/project/stpettersens/litelocale)
+[![Build status](https://ci.appveyor.com/api/projects/status/x937wesh830othcx?svg=true)](https://ci.appveyor.com/project/stpettersens/litelocale)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/stpettersens/litelocale/blob/master/LICENSE)
 [![Crates.io](https://img.shields.io/crates/v/litelocale.svg)](https://crates.io/crates/litelocale)
 
