@@ -64,4 +64,4 @@ fn main() {
 }
 ```
 
-[Documentation](https://doc.rs/litelocale)
+[Documentation](https://docs.rs/litelocale)
